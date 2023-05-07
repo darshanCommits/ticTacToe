@@ -1,0 +1,106 @@
+:root {
+	--headerHeight: 15dvh;
+	--mainHeight: calc(100dvh - var(--headerHeight));
+	--gameSize: 30rem;
+	--rounding: 5px;
+
+	/* COlORS */
+	--bg: #4a4a4a;
+	--fg: #fff;
+	--btn: #ff4151;
+	--btnShadow: red;
+}
+
+* {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+main section {
+	height: var(--mainHeight);
+}
+
+header {
+	height: var(--headerHeight);
+}
+
+header nav {
+	height: var(--headerHeight);
+	font-size: 2rem;
+	font-family: Ubuntu;
+	position: fixed;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	width: 100vw;
+	z-index: 2;
+	background-color: rgb(47, 79, 79);
+  color: #fff;
+}
+
+#page__1 {
+	background-color: var(--bg);
+	transform: translateY(-100%);
+}
+
+#game {
+	transform: translateY(-100%);
+	height: var(--mainHeight);
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+  place-content: space-evenly;
+  place-items : center;
+}
+
+#game__grid {
+	width: var(--gameSize);
+	height: var(--gameSize);
+  margin: auto 0;
+	background-color: lightblue;
+	display: grid;
+	grid-template-columns: repeat(4, 1fr);
+  
+	gap: 1rem;
+	padding: 1rem;
+	border-radius: var(--rounding);
+}
+
+.game__child {
+	background-color: lightcoral;
+	border-radius: var(--rounding);
+}
+
+#selection {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+#selection button {
+	width: 100px;
+	height: 60px;
+	border: none;
+	outline: none;
+	background-color: var(--btn);
+	border-radius: var(--rounding);
+	margin: 1rem;
+	cursor: pointer;
+	box-shadow: 5px 5px 0px var(--btnShadow);
+	transition: all 0.1s;
+}
+
+#selection button:active {
+	transform: translate(5px, 5px);
+	box-shadow: none;
+}
+
+#selection button:focus-visible {
+	outline: 1px solid black;
+}
+
+#selection .divider {
+	width: 1px;
+	height: 100px;
+	background-color: black;
+}
