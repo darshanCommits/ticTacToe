@@ -29,27 +29,45 @@ function getWinner() {
 	const gameBoard = board.getGameBoard();
 
 	const isWinner = arr => {
-		if (arr.every(move => move !== "X") || arr.every(move => move !== "O")) {
-			return false;
+		if (arr.every(move => move === "X") || arr.every(move => move === "O")) {
+			return true;
 		}
-		return true;
+		return false;
 	};
 
-	function checkRow() {
-
-		for (let i = 0; i < 9; i = i + 3) {
-
+	const checkRow = () => {
+		for (let i = 0; i < (3*3); i += 3) {
 			let row = [];
-			
-      for (let j = i; j < i + 3; j++) {
-				row.push(getMove(i));
-				if (isWinner(row) === true) return true;
-			}
 
+			for (let j = i; j < i + 3; j++) {
+				row.push(getMove(j));
+				if (isWinner(row)) return true;
+			}
 		}
-    
 		return false;
-	}
+	};
+
+	const checkColumn = () => {
+		for (let i = 0; i < 3; i++) {
+			let col = [];
+
+			for (let j = i; j < i + 3 * 2; j += 3) {
+				col.push(getMove(j));
+				if (isWinner(col)) return true;
+			}
+		}
+    return false;
+	};
+
+
+	const checkDiagonal = () => {
+    for(let i = 0 ; i < (3*3) ; i+=3 ) {
+      let diagonal = [];
+      for (let j = i; j < (3*3) ; j++) {
+        diagonal.push(getMove())
+      }
+    }
+  };
 }
 
 function main() {
