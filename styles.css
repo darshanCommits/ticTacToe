@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Itim&display=swap");
+
 :root {
 	--headerHeight: 15dvh;
 	--mainHeight: calc(100dvh - var(--headerHeight));
@@ -15,6 +17,7 @@
 	margin: 0;
 	padding: 0;
 	box-sizing: border-box;
+	font-family: "Itim", cursive;
 }
 
 main section {
@@ -36,7 +39,7 @@ header nav {
 	width: 100vw;
 	z-index: 2;
 	background-color: rgb(47, 79, 79);
-  color: #fff;
+	color: #fff;
 }
 
 #page__1 {
@@ -49,26 +52,33 @@ header nav {
 	height: var(--mainHeight);
 	display: grid;
 	grid-template-columns: repeat(3, 1fr);
-  place-content: space-evenly;
-  place-items : center;
+	place-content: space-evenly;
+	place-items: center;
 }
 
 #game__grid {
 	width: var(--gameSize);
 	height: var(--gameSize);
-  margin: auto 0;
+	margin: auto 0;
 	background-color: lightblue;
 	display: grid;
 	grid-template-columns: repeat(4, 1fr);
-  
+
 	gap: 1rem;
 	padding: 1rem;
 	border-radius: var(--rounding);
 }
 
 .game__child {
+	width: calc((var(--gameSize) - 5rem) / 4);
+	height: calc((var(--gameSize) - 5rem) / 4);
+	font-size: 5rem;
+	text-align: center;
 	background-color: lightcoral;
 	border-radius: var(--rounding);
+	/* transition: all 150ms ease-in-out; */
+	cursor: default;
+	user-select: none;
 }
 
 #selection {
@@ -103,4 +113,16 @@ header nav {
 	width: 1px;
 	height: 100px;
 	background-color: black;
+}
+
+#path {
+	stroke-dasharray: 2280.476806640625;
+	stroke-dashoffset: 2280.476806640625;
+	animation: draw 0.5s ease forwards;
+}
+
+@keyframes draw {
+	to {
+		stroke-dashoffset: 0;
+	}
 }
