@@ -62,7 +62,7 @@ header nav {
 	margin: auto 0;
 	background-color: lightblue;
 	display: grid;
-	grid-template-columns: repeat(4, 1fr);
+	grid-template-columns: repeat(3, 1fr);
 
 	gap: 1rem;
 	padding: 1rem;
