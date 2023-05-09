@@ -1,17 +1,24 @@
 // A tic tac toe game.
+const grid = document.querySelector("#game__grid");
+const gameBoard = board();
+
+// RELEVANT TO QUESTION
 
 function board() {
-	let gameBoard = new Array(9);
+	let gameBoard = [[], [], []];
 
-	const setMove = (index, value) => {
+	const setMove = (i, j, value) => {
 		// index is an array
-		gameBoard[index] = value;
+		gameBoard[i][j] = value;
 	};
 
-	const getMove = index => gameBoard[index];
-
+	const getMove = (i, j) => gameBoard[i][j];
 	const resetBoard = () => {
-		gameBoard.forEach(value => (value = undefined));
+		for (let i = 0; i < 3; i++) {
+			for (let j = 0; j < 3; j++) {
+				gameBoard[i][j] = "";
+			}
+		}
 	};
 
 	const getGameBoard = () => gameBoard;
@@ -23,79 +30,112 @@ function board() {
 		getGameBoard,
 	};
 }
-board();
+
+// LOOK AT THIS FUNCTION NAMED getWinner. I can't figure out how to determine who won. it can determine someone won but not who.
 
 function getWinner() {
-	const gameBoard = board.getGameBoard();
-
 	const isWinner = arr => {
-		if (arr.every(move => move === "X") || arr.every(move => move === "O")) {
-			return true;
-		}
-		return false;
+		if (arr.every(move => move === "X")) return "X";
+		else if (arr.every(move => move === "O")) return "O";
+		else return null;
 	};
 
-	const checkRow = () => {
-		for (let i = 0; i < (3*3); i += 3) {
+	const _checkRow = () => {
+		for (let i = 0; i < 3; i++) {
 			let row = [];
 
-			for (let j = i; j < i + 3; j++) {
-				row.push(getMove(j));
-				if (isWinner(row)) return true;
-			}
+			for (let j = 0; j < 3; j++) row.push(gameBoard.getMove(i, j));
+
+			if (isWinner(row) !== null) return isWinner(row);
 		}
-		return false;
+		return null;
 	};
 
-	const checkColumn = () => {
+	const _checkColumn = () => {
 		for (let i = 0; i < 3; i++) {
 			let col = [];
 
-			for (let j = i; j < i + 3 * 2; j += 3) {
-				col.push(getMove(j));
-				if (isWinner(col)) return true;
-			}
+			for (let j = 0; j < 3; j++) col.push(gameBoard.getMove(j, i));
+
+			if (isWinner(col) !== null) return isWinner(col);
 		}
-    return false;
+		return null;
 	};
 
+	const _checkDiagonal = () => {
+		let diagonal1 = [];
+		let diagonal2 = [];
 
-	const checkDiagonal = () => {
-    for(let i = 0 ; i < (3*3) ; i+=3 ) {
-      let diagonal = [];
-      for (let j = i; j < (3*3) ; j++) {
-        diagonal.push(getMove())
-      }
-    }
-  };
+		for (let i = 0; i < 3; i++) {
+			diagonal1.push(gameBoard.getMove(i, i));
+			diagonal2.push(gameBoard.getMove(i, 2 - i));
+		}
+
+		if (isWinner(diagonal1) !== null) return isWinner(diagonal1);
+		else if (isWinner(diagonal2) !== null) return isWinner(diagonal2);
+		else return null;
+	};
+
+	return _checkColumn() || _checkRow() || _checkDiagonal();
 }
 
-function main() {
-	const grid = document.querySelector("#game__grid");
-	let noOfMove = 0;
+function features() {
+	const newGame = () => {
+		gameBoard.resetBoard();
+		[...grid.children].forEach(x => (x.innerText = ""));
+	};
 
-	(function render() {
-		const fragment = document.createDocumentFragment();
-		for (let i = 1; i <= 9; i++) {
+	return {
+		newGame,
+	};
+}
+
+function render() {
+	const fragment = document.createDocumentFragment();
+	for (let i = 0; i < 3; i++) {
+		for (let j = 0; j < 3; j++) {
 			const gridChildren = document.createElement("div");
 			gridChildren.classList.add("game__child");
-			gridChildren.classList.add(i);
+			gridChildren.classList.add(`${i}-${j}`);
+			gridChildren.dataset.row = i;
+			gridChildren.dataset.column = j;
 
 			fragment.appendChild(gridChildren);
 		}
-		grid.appendChild(fragment);
-	})();
+	}
+	grid.appendChild(fragment);
+}
 
-	function registerMove(e) {
+function main() {
+	render(grid);
+
+	let noOfMove = 0;
+
+	const register = e => {
 		const whichMove = noOfMove => (noOfMove % 2 ? "X" : "O");
 		const target = e.target.closest(".game__child");
-		console.log(target);
+		const [row, col] = [target.dataset.row, target.dataset.column];
+
 		if (!target.classList.contains("bruh")) {
-			target.innerText = whichMove(noOfMove++);
+			target.innerText = whichMove(noOfMove);
+
+			gameBoard.setMove(row, col, whichMove(noOfMove));
+
 			target.classList.add("bruh");
+		} 
+
+		if (getWinner() !== null) {
+			[...grid.children].forEach(child => {
+				child.removeEventListener("click", registerMove);
+			});
 		}
-		// target.addEventListener("transitionend", function () {}, { once: true });
-	}
+
+		console.log(getWinner());
+	};
+	const registerMove = e => {
+		register(e);
+		noOfMove++;
+	};
 
 	[...grid.children].forEach(child => {
 		child.addEventListener("click", registerMove);
