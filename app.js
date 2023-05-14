@@ -69,13 +69,9 @@ function getWinner() {
 		else return null;
 	};
 
-	// console.log(gameBoard.getLength());
-
 	const _checkTie = () => {
 		if (
-			[...grid.children].every(
-				!(child => child.classList.contains("changed"))
-			) ||
+			![...grid.children].every(child => child.classList.contains("changed")) ||
 			ans !== null
 		)
 			return null;
