@@ -26,7 +26,7 @@ function board() {
 	};
 }
 
-function getWinner() {
+function getWinner(gameBoard) {
 	const isWinner = arr => {
 		if (arr.every(move => move === "X")) return "X";
 		else if (arr.every(move => move === "O")) return "O";
@@ -92,8 +92,6 @@ function getWinner() {
 // WIP
 
 function features() {
-	const winnerTab = document.querySelector("#winner__tab");
-	const winnerName = document.querySelector("#winner__name");
 
 	const render = grid => {
 		const fragment = document.createDocumentFragment();
@@ -112,7 +110,7 @@ function features() {
 
 	const newGame = () => {
 		gameBoard.resetBoard();
-		noOfMove = 0;
+		const grid = document.querySelector("#game__grid");
 
 		winnerTab.classList.remove("visible");
 		winnerName.innerText = "";
@@ -140,36 +138,37 @@ function main() {
 
 	let noOfMove = 0;
 
-	const register = e => {
-		const target = e.target.closest(".game__child");
-		const [row, col] = [target.dataset.row, target.dataset.column];
-
-		const whichMove = noOfMove => (noOfMove % 2 ? "X" : "O");
-
-		if (!target.classList.contains("changed")) {
-			target.innerText = whichMove(noOfMove);
-
-			gameBoard.setMove(row, col, whichMove(noOfMove));
-
-			target.classList.add("changed");
-		}
-
-		//this removes event listener if there is already a registered move.
-
-		if (getWinner() !== null) {
-			[...grid.children].forEach(child =>
-				child.removeEventListener("click", registerMove)
-			);
-		}
-
-		const winner = getWinner();
-		console.log(winner);
-		if (winner !== null) {
-			// features.renderWinner(winner);
-		}
-	};
-
 	const registerMove = e => {
+
+		const register = (e) => {
+			const target = e.target.closest(".game__child");
+			const [row, col] = [target.dataset.row, target.dataset.column];
+
+			const whichMove = noOfMove => (noOfMove % 2 ? "X" : "O");
+
+			if (!target.classList.contains("changed")) {
+				target.innerText = whichMove(noOfMove);
+
+				gameBoard.setMove(row, col, whichMove(noOfMove));
+
+				target.classList.add("changed");
+			}
+
+			//this removes event listener if there is already a registered move.
+
+			if (getWinner(gameBoard) !== null) {
+				[...grid.children].forEach(child =>
+					child.removeEventListener("click", registerMove)
+				);
+			}
+
+			const winner = getWinner();
+			console.log(winner);
+			if (winner !== null) {
+				// features.renderWinner(winner);
+			}
+		};
+		
 		register(e);
 		noOfMove++;
 	};
@@ -180,3 +179,4 @@ function main() {
 }
 
 main();
+
