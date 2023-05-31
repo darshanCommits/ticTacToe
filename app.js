@@ -1,6 +1,5 @@
 // A tic tac toe game.
 const grid = document.querySelector("#game__grid");
-const gameBoard = board();
 const feature = features();
 
 function board() {
@@ -92,7 +91,6 @@ function getWinner(gameBoard) {
 // WIP
 
 function features() {
-
 	const render = grid => {
 		const fragment = document.createDocumentFragment();
 		for (let i = 0; i < 3; i++) {
@@ -134,13 +132,14 @@ function features() {
 }
 
 function main() {
+	const gameBoard = board();
+
 	feature.render(grid);
 
 	let noOfMove = 0;
 
 	const registerMove = e => {
-
-		const register = (e) => {
+		const register = e => {
 			const target = e.target.closest(".game__child");
 			const [row, col] = [target.dataset.row, target.dataset.column];
 
@@ -162,13 +161,13 @@ function main() {
 				);
 			}
 
-			const winner = getWinner();
+			const winner = getWinner(gameBoard);
 			console.log(winner);
 			if (winner !== null) {
 				// features.renderWinner(winner);
 			}
 		};
-		
+
 		register(e);
 		noOfMove++;
 	};
@@ -179,4 +178,3 @@ function main() {
 }
 
 main();
-
