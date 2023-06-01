@@ -1,7 +1,52 @@
 // A tic tac toe game.
 const grid = document.querySelector("#game__grid");
-const feature = features();
 
+function main() {
+	const feature = features();
+	const gameBoard = board();
+
+	feature.render(grid);
+
+	let noOfMove = 0;
+
+	const registerMove = e => {
+		const register = e => {
+			const target = e.target.closest(".game__child");
+			const [row, col] = [target.dataset.row, target.dataset.column];
+
+			const whichMove = noOfMove => (noOfMove % 2 ? "X" : "O");
+
+			if (!target.classList.contains("changed")) {
+				target.innerText = whichMove(noOfMove);
+
+				gameBoard.setMove(row, col, whichMove(noOfMove));
+
+				target.classList.add("changed");
+			}
+
+			//this removes event listener if there is already a registered move.
+
+			if (getWinner(gameBoard) !== null) {
+				[...grid.children].forEach(child =>
+					child.removeEventListener("click", registerMove)
+				);
+			}
+
+			const winner = getWinner(gameBoard);
+			console.log(winner);
+			if (winner !== null) {
+				// features.renderWinner(winner);
+			}
+		};
+
+		register(e);
+		noOfMove++;
+	};
+
+	[...grid.children].forEach(child =>
+		child.addEventListener("click", registerMove, { once: true })
+	);
+}
 function board() {
 	let gameBoard = [[], [], []];
 
@@ -130,51 +175,4 @@ function features() {
 		renderWinner,
 	};
 }
-
-function main() {
-	const gameBoard = board();
-
-	feature.render(grid);
-
-	let noOfMove = 0;
-
-	const registerMove = e => {
-		const register = e => {
-			const target = e.target.closest(".game__child");
-			const [row, col] = [target.dataset.row, target.dataset.column];
-
-			const whichMove = noOfMove => (noOfMove % 2 ? "X" : "O");
-
-			if (!target.classList.contains("changed")) {
-				target.innerText = whichMove(noOfMove);
-
-				gameBoard.setMove(row, col, whichMove(noOfMove));
-
-				target.classList.add("changed");
-			}
-
-			//this removes event listener if there is already a registered move.
-
-			if (getWinner(gameBoard) !== null) {
-				[...grid.children].forEach(child =>
-					child.removeEventListener("click", registerMove)
-				);
-			}
-
-			const winner = getWinner(gameBoard);
-			console.log(winner);
-			if (winner !== null) {
-				// features.renderWinner(winner);
-			}
-		};
-
-		register(e);
-		noOfMove++;
-	};
-
-	[...grid.children].forEach(child =>
-		child.addEventListener("click", registerMove, { once: true })
-	);
-}
-
 main();
