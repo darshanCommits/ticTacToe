@@ -67,8 +67,24 @@ footer div:hover {
 }
 
 
+
 @media (min-width: 768px) {
 	:root {
 	--gameSize: 33rem;
 	}
+}
+
+
+/* javascript classes */
+
+.highlight {
+	color: white;
+}
+
+.visibile {
+	visibility: visible;
+}
+
+.hidden {
+	visibility: hidden;
 }

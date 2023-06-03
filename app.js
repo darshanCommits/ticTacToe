@@ -1,6 +1,9 @@
+const feature = features();
 const game1 = board();
 const grid = document.querySelector("#game__grid");
-features().render(grid);
+const $footer = document.querySelector("footer");
+
+feature.render(grid);
 
 main(grid, game1);
 
@@ -83,7 +86,29 @@ function getWinner(currentBoard) {
 	return ans || _checkTie(currentBoard);
 }
 
+// WIP
+
+function changeMode() {
+	const icon = $playerIcon => document.getElementsByClassName($playerIcon);
+
+	const visible = elem => elem.classList.add("visible");
+	const hidden = elem => elem.classList.remove("visible");
+
+	const change = () => {
+		visible("p1");
+		hidden("p2");
+	};
+}
+
 function features() {
+	const _addAndRemoveClass = ($toAdd, $toRemove, className) => {
+		const addClass = ($elem, className) => $elem.classList.add(className);
+		const removeClass = ($elem, className) => $elem.classList.remove(className);
+
+		addClass($toAdd, className);
+		removeClass($toRemove, className);
+	};
+
 	const render = $grid => {
 		const _createGameChild = (i, j) => {
 			const gridChildren = document.createElement("div");
@@ -105,8 +130,24 @@ function features() {
 		$grid.appendChild(fragment);
 	};
 
+	const highlight = ($footer, move) => {
+		const player1 = $footer.children[0]; //HUMAN
+		const player2 = $footer.children[2]; //COULD BE AI
+
+		if (move % 2) _addAndRemoveClass(player1, player2, "highlight");
+		else _addAndRemoveClass(player2, player1, "highlight");
+	};
+
+	const updateBoard = winner => {
+		if(winner === null) return;
+		const player = document.getElementById("board" + winner).children[1];
+		player.innerText++;
+	};
+
 	return {
 		render,
+		highlight,
+		updateBoard,
 	};
 }
 
@@ -132,8 +173,10 @@ function main(grid, currentBoard) {
 		};
 
 		register(e);
-		const winner = getWinner(gameBoard);
+		feature.highlight($footer, noOfMove);
 
+		const winner = getWinner(gameBoard);
+		feature.updateBoard(winner);
 		console.log(winner);
 
 		noOfMove++;
