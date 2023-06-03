@@ -1,5 +1,6 @@
 const game1 = board();
 const grid = document.querySelector("#game__grid");
+features().render(grid);
 
 main(grid, game1);
 
@@ -112,9 +113,8 @@ function features() {
 function main(grid, currentBoard) {
 	const gameBoard = game1.getGameBoard();
 
-	features().render(grid);
-
 	let noOfMove = 0;
+
 	const registerMove = e => {
 		const register = e => {
 			const whichMove = noOfMove => (noOfMove % 2 ? "X" : "O");

@@ -1,10 +1,6 @@
-@import url("https://fonts.googleapis.com/css2?family=Itim&display=swap");
-
 :root {
-	--mainHeight: calc(100dvh);
-	--gameSize: 27rem;
+	--gameSize: 30rem;
 	--rounding: 5px;
-
 	/* COlORS */
 	--bg: #4a4a4a;
 	--fg: #fff;
@@ -16,17 +12,25 @@
 	margin: 0;
 	padding: 0;
 	box-sizing: border-box;
-	/* font-family: "Itim", cursive; */
 }
 
-main {
-	height: var(--mainHeight);
+body {
+	height: 100dvh;
 	display: flex;
+	flex-direction: column;
+	row-gap: 2rem;
 	align-items: center;
 	justify-content: center;
 	background-color: black;
 }
 
+main, footer {
+	color: gray;
+	display: flex;
+	column-gap: 2rem;
+	align-items: center;
+	justify-content: center;
+}
 
 #game__grid {
 	width: var(--gameSize);
@@ -51,4 +55,20 @@ main {
 	color: white;
 	align-items: center;
 	justify-content: center;
+}
+
+footer:hover {
+	cursor: pointer;
+	user-select: none;
+}
+
+footer div:hover {
+	color: white;
+}
+
+
+@media (min-width: 768px) {
+	:root {
+	--gameSize: 33rem;
+	}
 }
