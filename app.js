@@ -85,19 +85,18 @@ function getWinner(currentBoard) {
 }
 
 function features() {
-	const addClass = ($elem, className) => $elem.classList.add(className);
-	const removeClass = ($elem, className) => $elem.classList.remove(className);
+	const _addClass = ($elem, className) => $elem.classList.add(className);
+	const _removeClass = ($elem, className) => $elem.classList.remove(className);
 	const addAndRemoveClass = ($toAdd, $toRemove, className, delay = 0) => {
-		addClass($toAdd, className);
-		setTimeout(removeClass($toRemove, className), delay);
+		_addClass($toAdd, className);
+		setTimeout(_removeClass($toRemove, className), delay);
 	};
 
 	const resetGrid = $grid => {
 		[...$grid.children].forEach($elem => {
 			$elem.innerText = "";
-			removeClass($elem, "changed");
+			_removeClass($elem, "changed");
 		});
-		// console.log($grid);}
 	};
 
 	const render = $grid => {
@@ -123,7 +122,10 @@ function features() {
 	};
 
 	const playerWon = $grid => {
-		[$grid.children].forEach(elem => addClass(elem, "blink"));
+		[...$grid.children].forEach($elem => _addClass($elem, "blink"));
+		setTimeout(() => {
+			[...$grid.children].forEach($elem => _removeClass($elem, "blink"));
+		}, 600);
 	};
 
 	const highlightPlayer = ($footer, move) => {
@@ -142,8 +144,6 @@ function features() {
 
 	return {
 		resetGrid,
-		addClass,
-		removeClass,
 		render,
 		highlightPlayer,
 		updateScore,
@@ -173,7 +173,7 @@ function startGame() {
 		if (!target.classList.contains("changed")) {
 			target.innerText = whichMove(noOfMove);
 			game1.setMove(gameBoard, row, col, whichMove(noOfMove));
-			feature.addClass(target, "changed");
+			target.classList.add("changed");
 		}
 
 		feature.highlightPlayer($footer, noOfMove);
@@ -182,8 +182,8 @@ function startGame() {
 		feature.updateScore(winner);
 
 		if (winner !== null) {
+			setTimeout(newGame, 600);
 			feature.playerWon($grid);
-			setTimeout(newGame, 1000);
 		}
 		noOfMove++;
 	};

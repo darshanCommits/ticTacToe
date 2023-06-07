@@ -87,17 +87,26 @@ footer div:hover {
 }
 
 .blink {
-	animation: blink-anim 1s;
+	animation: blink-anim .6s;
 }
 
 @keyframes blink-anim {
-	0%,
-	50%,
-	100% {
-		color: white;
+	/* 0%,
+	40%,
+	80% {
+		font-size: 6rem;
 	}
-	25%,
-	75% {
-		color: gray;
+	20%,
+	60%,
+	100% {
+		font-size: 0rem;
+	} */
+
+	0%, 66% {
+		font-size: 6rem;
+	}
+
+	33%, 100% {
+		font-size: 0rem;
 	}
 }
