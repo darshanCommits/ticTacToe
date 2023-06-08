@@ -1,6 +1,8 @@
 :root {
-	--gameSize: 30rem;
+	--gameSize: 21.7rem;
+	--iconSize: 3rem;
 	--rounding: 5px;
+	--fontSize: .8rem;
 	/* COlORS */
 	--bg: #4a4a4a;
 	--fg: #fff;
@@ -46,15 +48,20 @@ footer {
 
 .game__child {
 	display: flex;
-	width: calc((var(--gameSize) - 0.5rem) / 3);
-	height: calc((var(--gameSize) - 0.5rem) / 3);
-	font-size: 5rem;
+	width: calc((var(--gameSize) - .5rem) / 3);
+	height: calc((var(--gameSize) - .5rem) / 3);
+	font-size: var(--iconSize);
 	cursor: default;
 	user-select: none;
 	background-color: black;
 	color: white;
 	align-items: center;
 	justify-content: center;
+}
+
+footer {
+	font-size: var(--fontSize);
+
 }
 
 footer:hover {
@@ -69,6 +76,8 @@ footer div:hover {
 @media (min-width: 768px) {
 	:root {
 		--gameSize: 33rem;
+		--fontSize: 1rem;
+		--iconSize: 5rem;
 	}
 }
 
@@ -92,7 +101,7 @@ footer div:hover {
 
 @keyframes blink-anim {
 	0%, 66.6% {
-		font-size: 5rem;
+		font-size: var(--iconSize);
 	}
 
 	33.3%, 100% {

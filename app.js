@@ -7,12 +7,12 @@ const zero = feature.getZeroOrOne();
 
 // global event listener
 
-$gameMode.addEventListener("click", () => {
-	const whichMode = $gameMode.children[0].children;
-	const whichActiveMode = zero();
+// $gameMode.addEventListener("click", () => {
+// 	const whichMode = $gameMode.children[0].children;
+// 	const whichActiveMode = zero();
 
-	feature.addAndRemoveClass(whichMode[whichActiveMode], whichMode[whichActiveMode], "hidden");
-});
+// 	feature.addAndRemoveClass(whichMode[whichActiveMode], whichMode[whichActiveMode], "hidden");
+// });
 
 document.addEventListener("DOMContentLoaded", () => {
 	feature.render($grid, 3);
@@ -152,7 +152,7 @@ function features() {
 	const getZeroOrOne = () => {
 		let count = 0;
 		return () => (++count % 2 ? 0 : 1);
-	}
+	};
 	const resetGrid = $grid => {
 		[...$grid.children].forEach($elem => {
 			$elem.innerText = "";
