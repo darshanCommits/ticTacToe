@@ -1,9 +1,18 @@
 const $grid = document.querySelector("#game__grid");
 const $footer = document.querySelector("footer");
+const $gameMode = document.querySelector("#gameMode");
 const feature = features();
 const boardFn = board();
+const zero = feature.getZeroOrOne();
 
 // global event listener
+
+$gameMode.addEventListener("click", () => {
+	const whichMode = $gameMode.children[0].children;
+	const whichActiveMode = zero();
+
+	feature.addAndRemoveClass(whichMode[whichActiveMode], whichMode[whichActiveMode], "hidden");
+});
 
 document.addEventListener("DOMContentLoaded", () => {
 	feature.render($grid, 3);
@@ -43,8 +52,9 @@ function startGame() {
 		const target = e.target.closest(".game__child"); //finds the clicked box
 		const [row, col] = [target.dataset.row, target.dataset.column]; //determines the row and column in the array board
 
-		if (!target.classList.contains("changed")) applyMove(row, col, move, target);
-			
+		if (!target.classList.contains("changed"))
+			applyMove(row, col, move, target);
+
 		const winner = getWinner(gameBoard);
 		if (winner) winnerFound(winner, $grid);
 	};
@@ -53,6 +63,8 @@ function startGame() {
 		newGame,
 	};
 }
+
+function aiMove() {}
 
 function board() {
 	const getGameBoard = () => [[], [], []]; // returns the gameBoard
@@ -137,7 +149,10 @@ function features() {
 		_addClass($toAdd, className);
 		setTimeout(_removeClass($toRemove, className), delay);
 	};
-
+	const getZeroOrOne = () => {
+		let count = 0;
+		return () => (++count % 2 ? 0 : 1);
+	}
 	const resetGrid = $grid => {
 		[...$grid.children].forEach($elem => {
 			$elem.innerText = "";
@@ -189,6 +204,7 @@ function features() {
 
 	return {
 		resetGrid,
+		getZeroOrOne,
 		render,
 		highlightPlayer,
 		updateScore,
