@@ -1,12 +1,58 @@
-const feature = features();
-const game1 = board();
-// const gameBoard = game1.getGameBoard();
 const $grid = document.querySelector("#game__grid");
 const $footer = document.querySelector("footer");
+const feature = features();
+const boardFn = board();
 
-feature.render($grid);
+// global event listener
 
-// Tic Tac Toe game
+document.addEventListener("DOMContentLoaded", () => {
+	feature.render($grid, 3);
+	startGame().newGame();
+});
+
+function startGame() {
+	let gameBoard, noOfMove; //to be updated in the newGame function
+	const newGame = () => {
+		gameBoard = boardFn.getGameBoard();
+		feature.resetGrid($grid);
+		noOfMove = 1;
+
+		[...$grid.children].forEach(child => {
+			child.addEventListener("click", registerManualMoves, { once: true });
+		});
+	};
+
+	const whichMove = move => (move % 2 ? "X" : "O");
+
+	const applyMove = (row, col, currentMove, target) => {
+		target.innerText = currentMove;
+		boardFn.setMove(gameBoard, row, col, currentMove);
+		target.classList.add("changed");
+	};
+
+	const winnerFound = winner => {
+		feature.updateScore(winner);
+		setTimeout(newGame, 600);
+		feature.playerWon($grid);
+	};
+
+	const registerManualMoves = e => {
+		feature.highlightPlayer($footer, noOfMove);
+		const move = whichMove(noOfMove++);
+		console.log(move);
+		const target = e.target.closest(".game__child"); //finds the clicked box
+		const [row, col] = [target.dataset.row, target.dataset.column]; //determines the row and column in the array board
+
+		if (!target.classList.contains("changed")) applyMove(row, col, move, target);
+			
+		const winner = getWinner(gameBoard);
+		if (winner) winnerFound(winner, $grid);
+	};
+
+	return {
+		newGame,
+	};
+}
 
 function board() {
 	const getGameBoard = () => [[], [], []]; // returns the gameBoard
@@ -32,7 +78,7 @@ function getWinner(currentBoard) {
 		for (let i = 0; i < 3; i++) {
 			let row = [];
 
-			for (let j = 0; j < 3; j++) row.push(game1.getMove(currentBoard, i, j));
+			for (let j = 0; j < 3; j++) row.push(boardFn.getMove(currentBoard, i, j));
 
 			if (isWinner(row) !== null) return isWinner(row);
 		}
@@ -43,7 +89,7 @@ function getWinner(currentBoard) {
 		for (let i = 0; i < 3; i++) {
 			let col = [];
 
-			for (let j = 0; j < 3; j++) col.push(game1.getMove(currentBoard, j, i));
+			for (let j = 0; j < 3; j++) col.push(boardFn.getMove(currentBoard, j, i));
 
 			if (isWinner(col) !== null) return isWinner(col);
 		}
@@ -55,8 +101,8 @@ function getWinner(currentBoard) {
 		let diagonal2 = [];
 
 		for (let i = 0; i < 3; i++) {
-			diagonal1.push(game1.getMove(currentBoard, i, i));
-			diagonal2.push(game1.getMove(currentBoard, i, 2 - i));
+			diagonal1.push(boardFn.getMove(currentBoard, i, i));
+			diagonal2.push(boardFn.getMove(currentBoard, i, 2 - i));
 		}
 
 		return isWinner(diagonal1) || isWinner(diagonal2);
@@ -73,7 +119,7 @@ function getWinner(currentBoard) {
 
 		for (let i = 0; i < 3; i++) {
 			for (let j = 0; j < 3; j++)
-				if (game1.getMove(currentBoard, i, j) === "") return null;
+				if (boardFn.getMove(currentBoard, i, j) === "") return null;
 		}
 
 		return "Tied";
@@ -99,7 +145,7 @@ function features() {
 		});
 	};
 
-	const render = $grid => {
+	const render = ($grid, size) => {
 		const _createGameChild = (i, j) => {
 			const gridChildren = document.createElement("div");
 			gridChildren.classList.add("game__child");
@@ -111,14 +157,13 @@ function features() {
 
 		const fragment = document.createDocumentFragment();
 
-		for (let i = 0; i < 3; i++) {
-			for (let j = 0; j < 3; j++) {
+		for (let i = 0; i < size; i++) {
+			for (let j = 0; j < size; j++) {
 				const child = _createGameChild(i, j);
 				fragment.appendChild(child);
 			}
 		}
 		$grid.appendChild(fragment);
-		startGame().newGame();
 	};
 
 	const playerWon = $grid => {
@@ -132,7 +177,7 @@ function features() {
 		const player1 = $footer.children[0]; //HUMAN
 		const player2 = $footer.children[2]; //COULD BE AI
 
-		if (move % 2) addAndRemoveClass(player1, player2, "highlightPlayer");
+		if (move % 2) addAndRemoveClass(player1, player2, "highlight");
 		else addAndRemoveClass(player2, player1, "highlight");
 	};
 
@@ -149,46 +194,5 @@ function features() {
 		updateScore,
 		addAndRemoveClass,
 		playerWon,
-	};
-}
-
-function startGame() {
-	let gameBoard, noOfMove; //to be updated in the newGame function
-	const newGame = () => {
-		gameBoard = game1.getGameBoard();
-		feature.resetGrid($grid);
-		noOfMove = 0;
-
-		[...$grid.children].forEach(child => {
-			child.addEventListener("click", registerMove, { once: true });
-		});
-	};
-
-	const registerMove = e => {
-		const whichMove = move => (move % 2 ? "X" : "O");
-
-		const target = e.target.closest(".game__child"); //finds the clicked box
-		const [row, col] = [target.dataset.row, target.dataset.column]; //determines the row and column in the array board
-
-		if (!target.classList.contains("changed")) {
-			target.innerText = whichMove(noOfMove);
-			game1.setMove(gameBoard, row, col, whichMove(noOfMove));
-			target.classList.add("changed");
-		}
-
-		feature.highlightPlayer($footer, noOfMove);
-
-		const winner = getWinner(gameBoard);
-		feature.updateScore(winner);
-
-		if (winner !== null) {
-			setTimeout(newGame, 600);
-			feature.playerWon($grid);
-		}
-		noOfMove++;
-	};
-
-	return {
-		newGame,
 	};
 }

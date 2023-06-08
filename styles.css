@@ -91,22 +91,11 @@ footer div:hover {
 }
 
 @keyframes blink-anim {
-	/* 0%,
-	40%,
-	80% {
-		font-size: 6rem;
-	}
-	20%,
-	60%,
-	100% {
-		font-size: 0rem;
-	} */
-
-	0%, 66% {
-		font-size: 6rem;
+	0%, 66.6% {
+		font-size: 5rem;
 	}
 
-	33%, 100% {
+	33.3%, 100% {
 		font-size: 0rem;
 	}
 }
